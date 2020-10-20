@@ -76,6 +76,34 @@ y= target
 print(x)
 print(y)
 
+# commencer par la varieble target
+print(target.value_counts())
+#visualisation (maniere categorique)
+plt.figure(figsize= (6,8))
+sns.countplot(target)
+yes=target.value_counts()[1]/len(target)
+no= target.value_counts()[0]/len(target)
+print(f'le pourcentage des credit accordes est :{yes}')
+print(f'le pourcentage des credit non accordes est :{no}')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
