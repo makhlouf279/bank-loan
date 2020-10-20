@@ -9,6 +9,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
+from flask import Flask 
 import pickle
 
 #lire la dataset
@@ -168,6 +169,8 @@ def train_test_eval(models,x_train,y_train,x_test,y_test):
 train_test_eval(models, x_train, y_train, x_test, y_test)
 
 # une base de donne pour appliquer le model 
+
+ 
 x_2= x[['Credit_History','Married', 'CoapplicantIncome']]
 
 sss= StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
@@ -183,7 +186,16 @@ print('y_test taille:', y_test.shape)
 
 train_test_eval(models, x_2_train, y_train, x_2_test, y_test)
 
+#Déploiement du modèle avec flask
 
+#appliquer la regression logistique sur la base de donne
+
+Classifier= LogisticRegression()
+Classifier.fit(x_2, y)
+
+# enregiser le model
+
+pickle.dump(Classifier,open('model.pkl','wb'))
 
 
 
