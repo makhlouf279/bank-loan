@@ -78,6 +78,11 @@ print(y)
 
 # commencer par la varieble target
 print(target.value_counts())
+#toute la base de donne utilise
+
+df1=pd.concat([cat_data,num_data,target],axis=1)
+print(df1)
+
 #visualisation (maniere categorique)
 plt.figure(figsize= (6,8))
 sns.countplot(target)
@@ -86,21 +91,29 @@ no= target.value_counts()[0]/len(target)
 print(f'le pourcentage des credit accordes est :{yes}')
 print(f'le pourcentage des credit non accordes est :{no}')
 
+#historique de credit 
+grid= sns.FacetGrid(df1, col='Loan_Status',size=3.2, aspect=1.6)
+grid.map(sns.countplot, 'Credit_History')
 
+#sex 
+grid= sns.FacetGrid(df1, col='Loan_Status',size=3.2, aspect=1.6)
+grid.map(sns.countplot, 'Gender')
 
+#MMarier ou pas  
+grid= sns.FacetGrid(df1, col='Loan_Status',size=3.2, aspect=1.6)
+grid.map(sns.countplot, 'Married')
 
+#Education  
+grid= sns.FacetGrid(df1, col='Loan_Status',size=3.2, aspect=1.6)
+grid.map(sns.countplot, 'Education')
 
+#revenu de demandeur (visualization pour numerique)
+plt.scatter(df1['ApplicantIncome'],df1['Loan_Status'])
 
+#revenu de demandeur conjoint (visualization pour numerique)
+plt.scatter(df1['CoapplicantIncome'],df1['Loan_Status'])
 
-
-
-
-
-
-
-
-
-
+df1.groupby('Loan_Status').median()
 
 
 
