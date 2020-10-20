@@ -4,6 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
 import pickle
 
 #lire la dataset
@@ -114,6 +119,85 @@ plt.scatter(df1['ApplicantIncome'],df1['Loan_Status'])
 plt.scatter(df1['CoapplicantIncome'],df1['Loan_Status'])
 
 df1.groupby('Loan_Status').median()
+
+
+#developpement du model 
+# machine learning
+
+#diviser notre base de donne entre base de donne d`entrainement et autre de test
+
+sss= StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+
+for train ,test in sss.split(x,y):
+   x_train, x_test = x.iloc[train], x.iloc[test]   
+   y_train, y_test = y.iloc[train], y.iloc[test] 
+
+print('x_train taille: ', x_train.shape)
+print('x_test taille: ', x_test.shape)    
+print('y_train taille: ', y_train.shape)
+print('y_test taille: ', y_test.shape) 
+
+#appliquier notre model /// 3 algorithme machine learniing
+#// logistic Regresion. KNN.DecisionTree
+
+models={
+       
+       'LogisticRegression':LogisticRegression(random_state=42),
+       'KNeighborsClassifier':KNeighborsClassifier(),
+       'DecisionTreeClassifier':DecisionTreeClassifier(max_depth=1, random_state=42)
+       
+       }
+#definir la fonction de precision 
+def accu(y_true,y_pred, retu= False):
+     acc= accuracy_score(y_true,y_pred)
+     if retu:
+         return acc
+     else:
+         print(f'la precision de model est : {acc}')
+         
+#fonction d`application de model 
+
+def train_test_eval(models,x_train,y_train,x_test,y_test):
+ for name, model in models.items():
+     
+     print(name, ':')
+     model.fit(x_train, y_train)
+     accu(y_test,model.predict(x_test))
+     print('-'*30)
+     
+train_test_eval(models, x_train, y_train, x_test, y_test)
+
+# une base de donne pour appliquer le model 
+x_2= x[['Credit_History','Married', 'CoapplicantIncome']]
+
+sss= StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+
+for train ,test in sss.split(x_2,y):
+   x_2_train, x_2_test = x_2.iloc[train], x_2.iloc[test]   
+   y_train, y_test = y.iloc[train], y.iloc[test] 
+
+print('x_2_train taille:', x_2_train.shape)
+print('x_2_test taille:', x_2_test.shape)    
+print('y_train taille:', y_train.shape)
+print('y_test taille:', y_test.shape) 
+
+train_test_eval(models, x_2_train, y_train, x_2_test, y_test)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
